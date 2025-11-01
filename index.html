@@ -4,133 +4,204 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Babama 💌</title>
+<style>
+  body {
+    background-color: #fff9c4;
+    margin: 0;
+    font-family: 'Comic Sans MS', cursive;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  #letterContainer {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    max-width: 90vw;
+    width: 300px;
+  }
+
+  #letterImg {
+    width: 100%;
+    height: auto;
+  }
+
+  #postitImg, #babamlaImg {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    display: none;
+    border-radius: 10px;
+  }
+
+  #postitText {
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    width: 80%;
+    text-align: center;
+    display: none;
+    font-size: 1.2em;
+    color: black;
+    word-wrap: break-word;
+  }
+
+  #clickGuide, #balloonGuide {
+    margin-top: 10px;
+    font-size: 1.1em;
+    color: #555;
+  }
+
+  #lyrics {
+    display: none;
+    margin-top: 20px;
+    font-size: 1em;
+    color: #333;
+    width: 80vw;
+    white-space: pre-wrap;
+  }
+
+  /* Balonlar için responsive boyut */
+  .balloon {
+    width: 50px;
+    height: 70px;
+    border-radius: 50%;
+    position: fixed;
+    bottom: -100px;
+    cursor: pointer;
+    transition: all 8s linear;
+  }
+
+  @media (min-width: 600px) {
+    #postitText {
+      font-size: 1.4em;
+    }
+
+    #lyrics {
+      font-size: 1.2em;
+    }
+
+    .balloon {
+      width: 60px;
+      height: 80px;
+    }
+  }
+</style>
 </head>
-<body bgcolor="#fff9c4">
+<body>
 
-  <table width="100%" height="100%">
-    <tr>
-      <td align="center" valign="middle">
+<div class="container">
+  <!-- Mektup ve post-it container -->
+  <div id="letterContainer">
+    <img id="letterImg" src="mektup.png" alt="Mektup">
+    <img id="postitImg" src="postit.png" alt="Post-it">
+    <div id="postitText"></div>
+    <img id="babamlaImg" src="Babamla Ben.png" alt="Babamla Ben">
+    <div id="clickGuide">Mektubu açmak için üzerine tıkla</div>
+  </div>
 
-        <!-- Mektup ve post-it container -->
-        <div id="letterContainer" style="position: relative; cursor: pointer; display: inline-block;">
-          <img id="letterImg" src="mektup.png" alt="Mektup" style="width:30vw; height:auto;">
-          <img id="postitImg" src="postit.png" alt="Post-it" style="position:absolute; top:10%; left:10%; width:80%; display:none;">
-          <div id="postitText" style="position:absolute; top:20%; left:10%; width:80%; text-align:center; display:none; font-family: 'Comic Sans MS', cursive; font-size:1.4em; color:black;"></div>
-          <img id="babamlaImg" src="Babamla Ben.png" alt="Babamla Ben" style="position:absolute; top:10%; left:10%; width:80%; display:none; border-radius:10px;">
-          <!-- Tıklama rehberi -->
-          <div id="clickGuide" style="position:absolute; top:105%; left:50%; transform:translateX(-50%); font-family:'Comic Sans MS', cursive; font-size:1.2em; color:#555;">
-            Mektubu açmak için üzerine tıkla
-          </div>
-        </div>
+  <!-- Karaoke sözleri -->
+  <div id="lyrics"></div>
 
-        <!-- Karaoke sözleri -->
-        <div id="lyrics" style="display:none; margin-top:20px; text-align:center; font-size:1.2em; font-family: 'Comic Sans MS', cursive; color:#333; width:50vw; white-space:pre-wrap;"></div>
+  <!-- Balon tıklama rehberi -->
+  <div id="balloonGuide" style="display:none;">Balonların üzerine tıkla babacım 🎈</div>
+</div>
 
-        <!-- Balon tıklama rehberi -->
-        <div id="balloonGuide" style="display:none; text-align:center; margin-top:20px; font-family:'Comic Sans MS', cursive; font-size:1.2em; color:#555;">
-          Balonların üzerine tıkla babacım 🎈
-        </div>
+<!-- Sesler -->
+<audio id="paperSound" src="kagitsesi.mp3"></audio>
+<audio id="music" src="babama.mp3"></audio>
+<audio id="balloonSound" src="balon.mp3"></audio>
 
-      </td>
-    </tr>
-  </table>
+<script>
+const letterContainer = document.getElementById("letterContainer");
+const postitImg = document.getElementById("postitImg");
+const postitText = document.getElementById("postitText");
+const babamlaImg = document.getElementById("babamlaImg");
+const paperSound = document.getElementById("paperSound");
+const music = document.getElementById("music");
+const balloonSound = document.getElementById("balloonSound");
+const lyricsDiv = document.getElementById("lyrics");
+const clickGuide = document.getElementById("clickGuide");
+const balloonGuide = document.getElementById("balloonGuide");
 
-  <!-- Sesler -->
-  <audio id="paperSound" src="kagitsesi.mp3"></audio>
-  <audio id="music" src="babama.mp3"></audio>
-  <audio id="balloonSound" src="balon.mp3"></audio>
+const messages = [
+  "Seni çok seviyorum canım babam 💙",
+  "İyi ki varsın 💫",
+  "Senin prensesin olduğum için çok mutluyum 👑",
+  "Sana bir şarkı hazırladım 🎵\n▶️ Tıklayıp dinle"
+];
 
-  <script>
-    const letterContainer = document.getElementById("letterContainer");
-    const postitImg = document.getElementById("postitImg");
-    const postitText = document.getElementById("postitText");
-    const babamlaImg = document.getElementById("babamlaImg");
-    const paperSound = document.getElementById("paperSound");
-    const music = document.getElementById("music");
-    const balloonSound = document.getElementById("balloonSound");
-    const lyricsDiv = document.getElementById("lyrics");
-    const clickGuide = document.getElementById("clickGuide");
-    const balloonGuide = document.getElementById("balloonGuide");
+const lyrics = [
+  { time: 0, text: "Baba, sen benim kahramanımsın" },
+  { time: 3000, text: "Hayatımın en güzel yanısın" },
+  { time: 6000, text: "Seninle gülmek, seninle olmak" },
+  { time: 9000, text: "Dünyanın en güzel hediyesi... 🎶" }
+];
 
-    const messages = [
-      "Seni çok seviyorum canım babam 💙",
-      "İyi ki varsın 💫",
-      "Senin prensesin olduğum için çok mutluyum 👑",
-      "Sana bir şarkı hazırladım 🎵\n▶️ Tıklayıp dinle"
-    ];
+let clickCount = 0;
 
-    const lyrics = [
-      { time: 0, text: "Baba, sen benim kahramanımsın" },
-      { time: 3000, text: "Hayatımın en güzel yanısın" },
-      { time: 6000, text: "Seninle gülmek, seninle olmak" },
-      { time: 9000, text: "Dünyanın en güzel hediyesi... 🎶" }
-    ];
+letterContainer.addEventListener("click", () => {
+  paperSound.currentTime = 0;
+  paperSound.play();
 
-    let clickCount = 0;
+  if(clickCount < messages.length - 1){
+    postitImg.style.display = "block";
+    postitText.style.display = "block";
+    babamlaImg.style.display = "none";
+    postitText.innerText = messages[clickCount];
+    clickCount++;
+  } else if(clickCount === messages.length - 1){
+    postitImg.style.display = "none";
+    postitText.style.display = "none";
+    babamlaImg.style.display = "block";
+    clickGuide.style.display = "none";
+    balloonGuide.style.display = "block";
 
-    letterContainer.addEventListener("click", () => {
-      paperSound.currentTime = 0;
-      paperSound.play();
+    music.play();
+    lyricsDiv.style.display = "block";
 
-      if(clickCount < messages.length - 1){
-        postitImg.style.display = "block";
-        postitText.style.display = "block";
-        babamlaImg.style.display = "none";
-        postitText.innerText = messages[clickCount];
-        clickCount++;
-      } else if(clickCount === messages.length - 1){
-        postitImg.style.display = "none";
-        postitText.style.display = "none";
-        babamlaImg.style.display = "block";
-        clickGuide.style.display = "none";
-        balloonGuide.style.display = "block";
-
-        // Şarkıyı başlat
-        music.play();
-        lyricsDiv.style.display = "block";
-
-        // Karaoke tarzı sözler
-        lyrics.forEach(item => {
-          setTimeout(() => {
-            lyricsDiv.innerText = item.text;
-          }, item.time);
-        });
-
-        // Balon animasyonu ve patlatma
-        setInterval(() => {
-          const balloon = document.createElement("div");
-          balloon.style.width = "60px";
-          balloon.style.height = "80px";
-          balloon.style.borderRadius = "50%";
-          balloon.style.position = "fixed";
-          balloon.style.bottom = "-100px";
-          balloon.style.left = Math.random()*90 + "vw";
-          balloon.style.backgroundColor = ["#ff6b6b","#ffd93d","#6bcB77","#4d96ff","#f15bb5"][Math.floor(Math.random()*5)];
-          balloon.style.transition = "all 8s linear";
-          balloon.style.cursor = "pointer";
-
-          balloon.addEventListener("click", () => {
-            balloon.style.transform = "scale(0)";
-            balloon.style.transition = "transform 0.3s ease-out, opacity 0.3s";
-            balloon.style.opacity = "0";
-            balloonSound.currentTime = 0;
-            balloonSound.play();
-            setTimeout(() => balloon.remove(), 300);
-          });
-
-          document.body.appendChild(balloon);
-          setTimeout(() => {
-            balloon.style.bottom = "110vh";
-            balloon.style.opacity = "0";
-          }, 100);
-          setTimeout(() => balloon.remove(), 9000);
-        }, 400);
-
-        clickCount++;
-      }
+    lyrics.forEach(item => {
+      setTimeout(() => {
+        lyricsDiv.innerText = item.text;
+      }, item.time);
     });
-  </script>
+
+    setInterval(() => {
+      const balloon = document.createElement("div");
+      balloon.className = "balloon";
+      balloon.style.left = Math.random()*90 + "vw";
+      balloon.style.backgroundColor = ["#ff6b6b","#ffd93d","#6bcB77","#4d96ff","#f15bb5"][Math.floor(Math.random()*5)];
+
+      balloon.addEventListener("click", () => {
+        balloon.style.transform = "scale(0)";
+        balloon.style.transition = "transform 0.3s ease-out, opacity 0.3s";
+        balloon.style.opacity = "0";
+        balloonSound.currentTime = 0;
+        balloonSound.play();
+        setTimeout(() => balloon.remove(), 300);
+      });
+
+      document.body.appendChild(balloon);
+      setTimeout(() => {
+        balloon.style.bottom = "110vh";
+        balloon.style.opacity = "0";
+      }, 100);
+      setTimeout(() => balloon.remove(), 9000);
+    }, 400);
+
+    clickCount++;
+  }
+});
+</script>
+
 </body>
 </html>
-
 
